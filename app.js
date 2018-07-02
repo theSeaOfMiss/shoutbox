@@ -2,11 +2,15 @@ var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
+var session = require('express-session');
 var logger = require('morgan');
 var sassMiddleware = require('node-sass-middleware');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
+
+var register = require('./routes/register');
+var messages = require('./lib/messages');
 
 var app = express();
 
@@ -18,6 +22,12 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({
+  resave: false,
+  saveUninitialized: true,
+  secret: '1234'
+}));
+app.use(messages);
 app.use(sassMiddleware({
   src: path.join(__dirname, 'public'),
   dest: path.join(__dirname, 'public'),
@@ -25,6 +35,9 @@ app.use(sassMiddleware({
   sourceMap: true
 }));
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.get('/register', register.form);    // 添加注册路由
+app.post('/register', register.submit);   // 添加注册路由
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
