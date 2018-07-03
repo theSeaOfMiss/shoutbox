@@ -1,3 +1,5 @@
+global.__base = __dirname + '/';
+
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
@@ -11,11 +13,13 @@ var usersRouter = require('./routes/users');
 
 var register = require('./routes/register');
 var messages = require('./lib/messages');
+var login = require('./routes/login');
+var user = require('./lib/middleware/user');
 
 var app = express();
 
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
@@ -27,6 +31,7 @@ app.use(session({
   saveUninitialized: true,
   secret: '1234'
 }));
+app.use(user);
 app.use(messages);
 app.use(sassMiddleware({
   src: path.join(__dirname, 'public'),
@@ -38,6 +43,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/register', register.form);    // 添加注册路由
 app.post('/register', register.submit);   // 添加注册路由
+app.get('/login', login.form);    // 添加登入路由
+app.post('/login', login.submit);
+app.get('/logout', login.logout);
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
