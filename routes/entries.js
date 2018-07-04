@@ -11,7 +11,6 @@ exports.list = function (req, res, next) {
 				array.push(entries[count]);
 			}
 		}
-		console.log(array);
 
 		res.render('entries', {
 			title: 'Entries',

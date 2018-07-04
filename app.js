@@ -45,8 +45,6 @@ app.use(sassMiddleware({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/:page?', page(entry.count, 5),
-  entries.list);
 app.get('/post', entries.form);
 app.post('/post',
   validate.required('title'),
@@ -58,6 +56,8 @@ app.get('/login', login.form);    // 添加登入路由
 app.post('/login', login.submit);
 app.get('/logout', login.logout);
 app.get('/:page?', page(entry.count, 5),
+	entries.list);
+app.get('/', page(entry.count, 5),
 	entries.list);
 
 app.use('/', indexRouter);
