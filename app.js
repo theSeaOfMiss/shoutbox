@@ -15,6 +15,10 @@ var register = require('./routes/register');
 var messages = require('./lib/messages');
 var login = require('./routes/login');
 var user = require('./lib/middleware/user');
+var entries = require('./routes/entries');
+var validate = require('./lib/middleware/validate');
+var page = require('./lib/middleware/page');
+var entry = require('./lib/entry');
 
 var app = express();
 
@@ -41,11 +45,20 @@ app.use(sassMiddleware({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.get('/:page?', page(entry.count, 5),
+  entries.list);
+app.get('/post', entries.form);
+app.post('/post',
+  validate.required('title'),
+  validate.lengthAbove('title', 4),
+  entries.submit);
 app.get('/register', register.form);    // 添加注册路由
 app.post('/register', register.submit);   // 添加注册路由
 app.get('/login', login.form);    // 添加登入路由
 app.post('/login', login.submit);
 app.get('/logout', login.logout);
+app.get('/:page?', page(entry.count, 5),
+	entries.list);
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);

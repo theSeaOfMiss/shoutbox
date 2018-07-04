@@ -9,19 +9,19 @@
     <% include menu %>
 
     <h1><%= title %></h1>
-    <p>填写下面的表格进行登入！</p>
+    <p>填写下面的表格去增加一个帖子</p>
 
-    <% include messages %>
+    <% include messages.ejs %>
 
-    <form action="/login" method="post">
+    <form action="/post" method="post">
         <p>
-            <input type="text" name="name" placeholder="用户名" />
+            <input type="text" name="title" placeholder="标题" />
         </p>
         <p>
-            <input type="password" name="pass" placeholder="密码" />
+            <textarea name="body" placeholder="正文"></textarea>
         </p>
         <p>
-            <input type="submit" value="登入" />
+            <input type="submit" value="Post" />
         </p>
     </form>
 </body>

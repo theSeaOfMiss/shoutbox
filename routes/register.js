@@ -22,6 +22,6 @@ exports.submit = function (req, res, next) {
 							req.session.uid = user._id;
 							res.redirect('/');    // 重定向到首页
 					});
-		};
+		}
 	});
 };
