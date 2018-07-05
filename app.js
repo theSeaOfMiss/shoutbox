@@ -47,8 +47,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/post', entries.form);
 app.post('/post',
+  validate.auth,
   validate.required('title'),
   validate.lengthAbove('title', 4),
+  validate.required('body'),
   entries.submit);
 app.get('/register', register.form);    // 添加注册路由
 app.post('/register', register.submit);   // 添加注册路由
